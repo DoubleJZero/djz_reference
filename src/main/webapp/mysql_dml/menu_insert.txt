@@ -1,0 +1,239 @@
+INSERT INTO TB_MENU_M(
+	MENU_GROUP
+	, PARENT_MENU_GROUP
+	, MENU_DEPTH
+	, MENU_ID
+	, MENU_NAME
+	, MENU_DESCRIPTION
+	, USE_YN
+	, MENU_URL
+	, MENU_ORDER
+	, CREATE_USER
+  	, CREATE_DATE	
+  	, UPDATE_USER
+  	, UPDATE_DATE
+) VALUES (
+	'100'
+	, ''
+	, 1
+	, 'dmy1000'
+	, '더미1000'
+	, '더미'
+	, 'Y'
+	, '/main/main.do'
+	, 1
+	, 'SYSTEM'
+	, NOW()
+	, 'SYSTEM'
+	, NOW()
+);
+
+INSERT INTO TB_MENU_M(
+	MENU_GROUP
+	, PARENT_MENU_GROUP
+	, MENU_DEPTH
+	, MENU_ID
+	, MENU_NAME
+	, MENU_DESCRIPTION
+	, USE_YN
+	, MENU_URL
+	, MENU_ORDER
+	, CREATE_USER
+  	, CREATE_DATE	
+  	, UPDATE_USER
+  	, UPDATE_DATE
+) VALUES (
+	'100'
+	, '100'
+	, 2
+	, 'dmy1010'
+	, '더미1010'
+	, '더미'
+	, 'Y'
+	, '/main/main.do'
+	, 1
+	, 'SYSTEM'
+	, NOW()
+	, 'SYSTEM'
+	, NOW()
+);
+
+INSERT INTO TB_MENU_M(
+	MENU_GROUP
+	, PARENT_MENU_GROUP
+	, MENU_DEPTH
+	, MENU_ID
+	, MENU_NAME
+	, MENU_DESCRIPTION
+	, USE_YN
+	, MENU_URL
+	, MENU_ORDER
+	, CREATE_USER
+  	, CREATE_DATE	
+  	, UPDATE_USER
+  	, UPDATE_DATE
+) VALUES (
+	'100'
+	, '100'
+	, 2
+	, 'dmy1020'
+	, '더미1020'
+	, '더미'
+	, 'Y'
+	, '/main/main.do'
+	, 2
+	, 'SYSTEM'
+	, NOW()
+	, 'SYSTEM'
+	, NOW()
+);
+
+INSERT INTO TB_MENU_M(
+	MENU_GROUP
+	, PARENT_MENU_GROUP
+	, MENU_DEPTH
+	, MENU_ID
+	, MENU_NAME
+	, MENU_DESCRIPTION
+	, USE_YN
+	, MENU_URL
+	, MENU_ORDER
+	, CREATE_USER
+  	, CREATE_DATE	
+  	, UPDATE_USER
+  	, UPDATE_DATE
+) VALUES (
+	'100'
+	, '100'
+	, 2
+	, 'dmy1030'
+	, '더미1030'
+	, '더미'
+	, 'Y'
+	, '/main/main.do'
+	, 3
+	, 'SYSTEM'
+	, NOW()
+	, 'SYSTEM'
+	, NOW()
+);
+
+INSERT INTO TB_MENU_M(
+	MENU_GROUP
+	, PARENT_MENU_GROUP
+	, MENU_DEPTH
+	, MENU_ID
+	, MENU_NAME
+	, MENU_DESCRIPTION
+	, USE_YN
+	, MENU_URL
+	, MENU_ORDER
+	, CREATE_USER
+  	, CREATE_DATE	
+  	, UPDATE_USER
+  	, UPDATE_DATE
+) VALUES (
+	'200'
+	, ''
+	, 1
+	, 'dmy2000'
+	, '더미2000'
+	, '더미'
+	, 'Y'
+	, '/main/main.do'
+	, 2
+	, 'SYSTEM'
+	, NOW()
+	, 'SYSTEM'
+	, NOW()
+);
+
+INSERT INTO TB_MENU_M(
+	MENU_GROUP
+	, PARENT_MENU_GROUP
+	, MENU_DEPTH
+	, MENU_ID
+	, MENU_NAME
+	, MENU_DESCRIPTION
+	, USE_YN
+	, MENU_URL
+	, MENU_ORDER
+	, CREATE_USER
+  	, CREATE_DATE	
+  	, UPDATE_USER
+  	, UPDATE_DATE
+) VALUES (
+	'200'
+	, '200'
+	, 2
+	, 'dmy2010'
+	, '더미2010'
+	, '더미'
+	, 'Y'
+	, '/main/main.do'
+	, 1
+	, 'SYSTEM'
+	, NOW()
+	, 'SYSTEM'
+	, NOW()
+);
+
+INSERT INTO TB_MENU_M(
+	MENU_GROUP
+	, PARENT_MENU_GROUP
+	, MENU_DEPTH
+	, MENU_ID
+	, MENU_NAME
+	, MENU_DESCRIPTION
+	, USE_YN
+	, MENU_URL
+	, MENU_ORDER
+	, CREATE_USER
+  	, CREATE_DATE	
+  	, UPDATE_USER
+  	, UPDATE_DATE
+) VALUES (
+	'200'
+	, '200'
+	, 2
+	, 'dmy2020'
+	, '더미2020'
+	, '더미'
+	, 'Y'
+	, '/main/main.do'
+	, 2
+	, 'SYSTEM'
+	, NOW()
+	, 'SYSTEM'
+	, NOW()
+);
+
+INSERT INTO TB_MENU_M(
+	MENU_GROUP
+	, PARENT_MENU_GROUP
+	, MENU_DEPTH
+	, MENU_ID
+	, MENU_NAME
+	, MENU_DESCRIPTION
+	, USE_YN
+	, MENU_URL
+	, MENU_ORDER
+	, CREATE_USER
+  	, CREATE_DATE	
+  	, UPDATE_USER
+  	, UPDATE_DATE
+) VALUES (
+	'200'
+	, '200'
+	, 2
+	, 'dmy2030'
+	, '더미2030'
+	, '더미'
+	, 'Y'
+	, '/main/main.do'
+	, 3
+	, 'SYSTEM'
+	, NOW()
+	, 'SYSTEM'
+	, NOW()
+);

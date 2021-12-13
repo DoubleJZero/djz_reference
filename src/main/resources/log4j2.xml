@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE xml>
+<Configuration>
+	<Properties>
+		<Property name="FILENAME">${current.property.type}</Property>
+		<Property name="LAYOUT">%d %5p [%c] %m%n</Property>
+		<Property name="SELECTCONDITION">${current.log.mode}</Property>
+	</Properties>
+    <Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${LAYOUT}"/>
+		</Console>
+		<RollingFile name="file" fileName="./logs/${FILENAME}_master.log" filePattern="./logs/$${date:yyyyMMdd}/${FILENAME}_%d{yyyyMMddHH}.log">
+			<PatternLayout pattern="${LAYOUT}" />
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10MB" />
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+		</RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="java.sql" level="INFO" additivity="false">
+            <AppenderRef ref="${SELECTCONDITION}" />
+        </Logger>
+        <Logger name="egovframework" level="INFO" additivity="false">
+            <AppenderRef ref="${SELECTCONDITION}" />
+        </Logger>
+          <!-- log SQL with timing information, post execution -->
+        <Logger name="jdbc.sqltiming" level="INFO" additivity="false">
+            <AppenderRef ref="${SELECTCONDITION}" />
+        </Logger>
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="${SELECTCONDITION}" />
+        </Logger>
+        <Root level="DEBUG">
+            <AppenderRef ref="${SELECTCONDITION}" />
+        </Root>
+    </Loggers>
+</Configuration>

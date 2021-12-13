@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="FILESERVICE">
+	<select id="selectFileList" parameterType="map" resultType="egovMap">
+		SELECT
+				ATCHFL_ID
+		    	, ATCHFL_GRP_ID
+		        , ATCHFL_NM
+		        , ATCHFL_PHSC_NM
+		        , ATCHFL_ROUTE
+		        , ATCHFL_EXTNSN_NM
+		        , ATCHFL_SIZE
+		  FROM TB_ATCHFL
+		 WHERE ATCHFL_GRP_ID = #{atchflGrpId}
+	</select>
+
+	<select id="selectFileInfo" parameterType="map" resultType="egovMap">
+		SELECT
+				ATCHFL_ID
+		    	, ATCHFL_GRP_ID
+		        , ATCHFL_NM
+		        , ATCHFL_PHSC_NM
+		        , ATCHFL_ROUTE
+		        , ATCHFL_EXTNSN_NM
+		        , ATCHFL_SIZE
+		  FROM TB_ATCHFL
+		 WHERE ATCHFL_ID = #{atchflId}
+	</select>
+
+	<insert id="insertFile" parameterType="map">
+	    INSERT INTO TB_ATCHFL(
+	    								 ATCHFL_ID
+								    	 , ATCHFL_GRP_ID
+								         , ATCHFL_NM
+								         , ATCHFL_PHSC_NM
+								         , ATCHFL_ROUTE
+								         , ATCHFL_EXTNSN_NM
+								         , ATCHFL_SIZE
+								         , CREATE_USER
+									  	 , CREATE_DATE
+									  	 , UPDATE_USER
+									  	 , UPDATE_DATE
+	    )VALUES(
+								         #{atchflId}
+								         , #{atchflGrpId}
+								         , #{atchflNm}
+								         , #{atchflPhscNm}
+								         , #{atchflRoute}
+								         , #{atchflExtnsnNm}
+								         , #{atchflSize}
+								         , #{userId}
+									  	 , NOW()
+									  	 , #{userId}
+									  	 , NOW()
+	    )
+	</insert>
+
+	<delete id="deleteFileInfo" parameterType="map">
+		DELETE FROM TB_ATCHFL
+		 WHERE ATCHFL_ID = #{atchflId}
+	</delete>
+</mapper>

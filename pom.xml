@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>kr.co</groupId>
+	<artifactId>djz_reference</artifactId>
+	<packaging>war</packaging>
+	<version>1.0.0</version>
+	<name>djz_reference</name>
+
+	<licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+	<properties>
+	    <spring.maven.artifact.version>4.3.22.RELEASE</spring.maven.artifact.version>
+		<egovframework.rte.version>3.10.0</egovframework.rte.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>mvn2s</id>
+			<url>https://repo1.maven.org/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>egovframe</id>
+			<url>http://maven.egovframe.go.kr/maven/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>repos_j</id>
+         	<name>repos_j</name>
+			<url>http://192.168.88.128:8081/nexus/content/repositories/repos_j/</url>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<current.log.mode>Console</current.log.mode>
+				<current.property.type>local</current.property.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<current.log.mode>file</current.log.mode>
+				<current.property.type>dev</current.property.type>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+
+			<properties>
+				<current.log.mode>file</current.log.mode>
+				<current.property.type>prod</current.property.type>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+	        <groupId>kr.co</groupId>
+	        <artifactId>djz_repos</artifactId>
+	        <version>0.0.1-snapshot</version>
+	    </dependency>
+
+        <dependency>
+		    <groupId>egovframework.rte</groupId>
+		    <artifactId>egovframework.rte.ptl.mvc</artifactId>
+		    <version>${egovframework.rte.version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<artifactId>commons-logging</artifactId>
+		    		<groupId>commons-logging</groupId>
+		    	</exclusion>
+		    </exclusions>
+        </dependency>
+        <dependency>
+		    <groupId>egovframework.rte</groupId>
+		    <artifactId>egovframework.rte.psl.dataaccess</artifactId>
+		    <version>${egovframework.rte.version}</version>
+        </dependency>
+        <dependency>
+			<groupId>egovframework.rte</groupId>
+			<artifactId>egovframework.rte.fdl.idgnr</artifactId>
+			<version>${egovframework.rte.version}</version>
+		</dependency>
+       	<dependency>
+			<groupId>egovframework.rte</groupId>
+			<artifactId>egovframework.rte.fdl.property</artifactId>
+			<version>${egovframework.rte.version}</version>
+		</dependency>
+
+        <dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>servlet-api</artifactId>
+		    <scope>provided</scope>
+		    <version>2.5</version>
+        </dependency>
+
+        <dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
+        </dependency>
+
+        <dependency>
+		    <groupId>taglibs</groupId>
+		    <artifactId>standard</artifactId>
+		    <version>1.1.2</version>
+        </dependency>
+
+		<dependency>
+	        <groupId>org.antlr</groupId>
+	        <artifactId>antlr</artifactId>
+	        <version>3.5</version>
+   		</dependency>
+
+   		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.9.9</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>3.7</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+			<version>1.16</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.googlecode.log4jdbc</groupId>
+			<artifactId>log4jdbc</artifactId>
+			<version>1.2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.11</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-compress</artifactId>
+		    <version>1.21</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.2</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.2.1</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+        <defaultGoal>install</defaultGoal>
+        <directory>${basedir}/target</directory>
+        <finalName>ROOT</finalName>
+        <resources>
+		    <resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+		    </resource>
+		</resources>
+        <pluginManagement>
+            <plugins>
+            	<plugin>
+	                <groupId>org.apache.tomcat.maven</groupId>
+	                <artifactId>tomcat7-maven-plugin</artifactId>
+	                <version>2.2</version>
+	                <configuration>
+	                    <url>http://192.168.88.128:8080/manager/text</url>
+	                    <path>/</path>
+	                    <username>test</username>
+	                    <password>test</password>
+	                    <uriEncoding>UTF-8</uriEncoding>
+	                    <contextReloadable>true</contextReloadable>
+	                    <systemProperties>
+                            <JAVA_OPTS>-Xms256m -Xmx768m -XX:MaxPermSize=256m</JAVA_OPTS>
+                        </systemProperties>
+	                </configuration>
+	            </plugin>
+                <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+						<encoding>UTF-8</encoding>
+						<maxmem>1024m</maxmem>
+					</configuration>
+				</plugin>
+                <!-- PMD manven plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.12.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!-- JavaDoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

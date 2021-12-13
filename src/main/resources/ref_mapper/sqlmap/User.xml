@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="USERSERVICE">
+
+	<insert id="insertUser" parameterType="map">
+		INSERT INTO TB_USER_M (
+				USER_ID
+				, USER_PW
+				, USER_NAME
+				, ZIPCODE
+				, ADDRESS
+				, ADDRESS_DETAIL
+				, EMAIL
+				, MOBILE
+				, SMS_YN
+				, EMAIL_YN
+				, CHANGE_PW_DATE
+				, CREATE_USER
+				, CREATE_DATE
+				, UPDATE_USER
+				, UPDATE_DATE
+			) VALUES (
+				#{userId}
+				, #{userPw}
+				, #{userName}
+				, #{zipcode}
+				, #{address}
+				, #{addressDetail}
+				, #{email}
+				, #{mobile}
+				, #{smsYn}
+				, #{emailYn}
+				, DATE_FORMAT(NOW(), '%Y-%m-%d')
+				, #{createUser}
+				, NOW()
+				, #{updateUser}
+				, NOW()
+			)
+	</insert>
+
+	<update id="updateUser" parameterType="map">
+		UPDATE TB_USER_M
+		   SET
+		   		USER_NAME = #{userName}
+				, ZIPCODE = #{zipcode}
+				, ADDRESS = #{address}
+				, ADDRESS_DETAIL = #{addressDetail}
+				, EMAIL = #{email}
+				, MOBILE = #{mobile}
+				, SMS_YN = #{smsYn}
+				, EMAIL_YN = #{emailYn}
+				, UPDATE_USER = #{userName}
+				, UPDATE_DATE = NOW()
+				<if test='pwModifyYn == "Y"'>
+				, USER_PW = #{newPw}
+				, CHANGE_PW_DATE = DATE_FORMAT(NOW(), '%Y-%m-%d')
+				</if>
+      	 WHERE USER_ID 			= #{userId}
+	</update>
+
+	<insert id="insertUserCertificationNumber" parameterType="map">
+		INSERT INTO TB_USER_CERTI_NUMBER (
+				USER_ID
+				, CERTIFICATION_NUMBER
+		) VALUES (
+				#{userId}
+				, #{certificationNumber}
+		)
+		ON DUPLICATE KEY
+		UPDATE CERTIFICATION_NUMBER = #{certificationNumber}
+	</insert>
+
+	<insert id="insertSmsQue" parameterType="map">
+		INSERT INTO TB_SMS_QUE (
+				SMS_TO_PHONE
+				, SMS_FROM_PHONE
+				, SMS_MSG
+		) VALUES (
+				#{smsToPhone}
+				, #{smsFromPhone}
+				, #{smsMsg}
+		)
+	</insert>
+
+	<select id="selectUserCertificationNumber" parameterType="map" resultType="EgovMap">
+		SELECT
+				USER_ID
+				, CERTIFICATION_NUMBER
+		  FROM TB_USER_CERTI_NUMBER
+		 WHERE USER_ID = #{userId}
+		 LIMIT 1
+	</select>
+
+	<select id="selectIsDupUserMobileCnt" parameterType="map" resultType="Integer">
+		SELECT COUNT(USER_ID)
+		  FROM TB_USER_M
+		 WHERE MOBILE = #{mobile}
+	</select>
+
+	<select id="selectIsDupUserEmailCnt" parameterType="map" resultType="Integer">
+		SELECT COUNT(USER_ID)
+		  FROM TB_USER_M
+		 WHERE EMAIL = #{email}
+	</select>
+
+	<select id="selectIntr" parameterType="map" resultType="egovMap">
+		SELECT
+				USER_ID
+				, ATCHFL_GRP_ID
+		  FROM TB_USER_INTR
+		 WHERE USER_ID = #{userId}
+	</select>
+
+	<insert id="insertIntr" parameterType="map">
+		INSERT INTO TB_USER_INTR (
+				USER_ID
+				, ATCHFL_GRP_ID
+				, CREATE_USER
+				, CREATE_DATE
+				, UPDATE_USER
+				, UPDATE_DATE
+		) VALUES (
+				#{userId}
+				, #{atchflGrpId}
+				, #{createUser}
+				, NOW()
+				, #{updateUser}
+				, NOW()
+		)
+	</insert>
+
+	<delete id="deleteIntr" parameterType="map">
+		DELETE FROM TB_USER_INTR
+		 WHERE USER_ID = #{userId}
+	</delete>
+</mapper>
