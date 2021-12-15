@@ -3,7 +3,7 @@
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
-
+<!--
 	<aop:config>
 		<aop:pointcut id="serviceMethod" expression="execution(* kr.co.djz_reference.service.*.*(..))" />
 		<aop:aspect ref="exceptionTransfer">
@@ -35,8 +35,7 @@
 		</property>
 	</bean>
 
-
 	<bean id="egovHandler" class="kr.co.djz_reference.common.EgovExcepHndlr" />
 	<bean id="otherHandler" class="kr.co.djz_reference.common.EgovOthersExcepHndlr" />
-
+ -->
 </beans>

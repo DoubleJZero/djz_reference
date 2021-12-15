@@ -2,6 +2,7 @@ package kr.co.djz_reference.common;
 
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,8 +42,13 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 		if(uri.indexOf("popPrint") == -1) {
 			if (!UserDetailsHelper.isAuthenticated()) {
-			    logger.warn("########## 미로그인 사용자 {} 호출 ##########", uri);
-			    response.sendRedirect("/login.do?statusCode=888");
+				logger.warn("########## 미로그인 사용자 {} 호출 ##########", uri);
+
+				request.setAttribute("statusCode", "888");
+
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/login.do");
+				dispatcher.forward(request, response);
+
 			    return false;
 			}
 		}

@@ -51,45 +51,6 @@ public class LoginService extends DjzCbsService {
     private static final Logger logger = LoggerFactory.getLogger(LoginService.class);
 
 	/**
-	 * 로그인 유효성 검사
-	 *
-	 * @param params
-	 * @return
-	 */
-    @Transactional(rollbackFor = Exception.class)
-	public Map<String, Object> getLoginValidation(Map<String, Object> param) {
-    	Map<String, Object> res = mapper.selectOne(serviceId+".selectUserInfo", param);
-
-		String encPw = DjzComUtil.shaEncrypt((String) param.get("userPw"));
-
-		/* ■ 비민번호 변경일
-		 * 비밀번호 변경일이 null 또는 "" 일 경우 무조건 변경 하도록 하드코딩
-		 */
-		String changePwDate = "20200101";
-
-		if(res != null) {
-			changePwDate = (String) res.get("changePwDate");
-			changePwDate = StringUtils.isBlank(changePwDate) ? "20200101" : changePwDate;
-		}
-
-		if(changePwDate.length() != 8) changePwDate = changePwDate.replaceAll("-", "");
-
-		int statusCode = DjzHttpStatus.NORMAL.getStatusCode();
-
-		/* ■ 상태코드
-		 * 700 : 정상
-    	 * 705 : 해당 아이디로 조회결과 없음
-    	 * 706 : 비밀번호 불일치
-    	 * 707 : 비밀번호 변경 후 12개월 경과
-    	 */
-		if(res == null) statusCode = DjzHttpStatus.DATA_EMPTY.getStatusCode();
-		else if(!((String) res.get("userPw")).equals(encPw)) statusCode = DjzHttpStatus.ETC_FIRST.getStatusCode();
-		else if(DjzComUtil.dateDiff(changePwDate) > 365) statusCode = DjzHttpStatus.ETC_SECOND.getStatusCode();
-
-		return DjzComUtil.responseMap(statusCode, res);
-	}
-
-	/**
 	 * 비밀번호 변경
 	 *
 	 * @param params
@@ -127,23 +88,6 @@ public class LoginService extends DjzCbsService {
 		}
 
 		return DjzComUtil.responseMap(statusCode);
-	}
-
-	/**
-	 * 회원정보를 조회한다.
-	 * @param params - 조회할 정보가 담긴 param
-	 * @return 회원정보
-	 */
-    @Transactional(rollbackFor = Exception.class)
-	public Map<String, Object> selectUserInfo(Map<String, Object> param) {
-    	Map<String, Object> res = getLoginValidation(param);
-
-		int statusCode = (int) res.get("statusCode");
-
-		/* ■ 현재로그인시간 update */
-		if(statusCode == 700) mapper.update(serviceId+".updateUserLastLoginDate", param);
-
-		return res;
 	}
 
 	/**

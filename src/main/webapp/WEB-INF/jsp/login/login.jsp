@@ -75,73 +75,7 @@
 
 		userId = userId.replace(/\s/gi, "");
 
-		$.ajax({
-			type : "POST",
-			url : "/loginValidation.do",
-			data : {"userId":userId, "userPw":userPw},
-			dataType : 'json',
-			success : function(data) {
-				/* ■ 상태코드
-				 * 700 : 정상
-		    	 * 705 : 해당 아이디로 조회결과 없음
-		    	 * 706 : 비밀번호 불일치
-		    	 * 707 : 비밀번호 변경 후 12개월 경과
-		    	 */
-				if(data.statusCode == 700){
-					$.ajax({
-						type : "POST",
-						url : "/dupLoginCheck.do",
-						data : {"userId":userId, "userPw":userPw},
-						dataType : 'text',
-						success : function(data2) {
-							if(data2.status == "Y") {
-								/* ■ confirm
-								 * 타이틀이 필요없을 경우 삭제
-								 */
-								swal({
-									title: '<spring:message code="login.connecting" />',
-					                text: '<spring:message code="login.dupMsg1" />\n\r<spring:message code="login.dupMsg2" />',
-					                icon: "warning",
-					                buttons: ['<spring:message code="button.cancel" />','<spring:message code="button.confirm" />'],
-					                dangerMode: true,
-					            })
-					            .then((willDelete) => {
-					                if (willDelete) {
-					                	dynamicSubmit.createFormSubmit("/actionLogin.do", "post", "", "userId,userPw", userId+","+userPw, 2);
-					                }
-					            });
-							}else{
-								dynamicSubmit.createFormSubmit("/actionLogin.do", "post", "", "userId,userPw", userId+","+userPw, 2);
-							}
-						},
-						error : function(request, status, error) {
-							alert("status: " + request.status + ", error: " + error);
-						}
-					});
-				}else if(data.statusCode == 705){
-					swal('<spring:message code="login.errMsg3" />').then((ok)=>{
-						if(ok){
-							$("#userId").focus();
-						}
-					});
-				}else if(data.statusCode == 706){
-					swal('<spring:message code="login.errMsg4" />').then((ok)=>{
-						if(ok){
-							$("#userPw").focus();
-						}
-					});
-				}else if(data.statusCode == 707){
-					swal('<spring:message code="login.errMsg7" />').then((ok)=>{
-						if(ok){
-							dynamicSubmit.createFormSubmit("/pwdChange.do", "post","","userId",userId,1);
-						}
-					});
-				}
-			},
-			error : function(request, status, error) {
-				alert("status: " + request.status + ", error: " + error);
-			}
-		});
+		dynamicSubmit.createFormSubmit("/actionLogin.do", "post", "", "userId,userPw,${_csrf.parameterName}", userId+","+userPw+",${_csrf.token}", 3);
 	}
 
 	function fn_join(){
@@ -166,11 +100,31 @@
 	});
 	'</c:if>'
 
-	'<c:if test="${!empty statusCode and statusCode eq 889}">'
+	'<c:if test="${!empty statusCode and statusCode eq 705}">'
 	$(function(){
-		swal('<spring:message code="login.errMsg22" />').then((ok)=>{
+		swal('<spring:message code="login.errMsg3" />').then((ok)=>{
 			if(ok){
 				$("#userId").focus();
+			}
+		});
+	});
+	'</c:if>'
+
+	'<c:if test="${!empty statusCode and statusCode eq 706}">'
+	$(function(){
+		swal('<spring:message code="login.errMsg4" />').then((ok)=>{
+			if(ok){
+				$("#userPw").focus();
+			}
+		});
+	});
+	'</c:if>'
+
+	'<c:if test="${!empty statusCode and statusCode eq 707}">'
+	$(function(){
+		swal('<spring:message code="login.errMsg7" />').then((ok)=>{
+			if(ok){
+				dynamicSubmit.createFormSubmit("/pwdChange.do", "post","","userId",userId,1);
 			}
 		});
 	});

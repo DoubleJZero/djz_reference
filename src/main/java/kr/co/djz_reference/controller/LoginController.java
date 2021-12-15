@@ -14,11 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.djz.common.DjzHttpSessionBindingListener;
-import kr.co.djz.common.DjzMultiLoginPreventor;
 import kr.co.djz.utility.DjzComUtil;
 import kr.co.djz_reference.common.UserDetailsHelper;
 import kr.co.djz_reference.service.CommonService;
@@ -69,6 +65,9 @@ public class LoginController {
 		String statusCode = request.getParameter("statusCode");
 		String searchUserId = request.getParameter("searchUserId");
 
+		if(StringUtils.isBlank(statusCode)) statusCode = (String) request.getAttribute("statusCode");
+		if(StringUtils.isBlank(searchUserId)) searchUserId = (String) request.getAttribute("searchUserId");
+
 		/* ■ 세션이 존재한다면 메인으로 이동 */
 		if(UserDetailsHelper.isAuthenticated()) {
 			model.addAttribute("statusCode", statusCode);
@@ -80,20 +79,6 @@ public class LoginController {
 
 		return "login/login";
 	}
-
-	/**
-	 * 로그인 유효성 검사
-     * Mapping Address : /loginValidation.do
-	 *
-	 * @param userVO
-	 * @param request
-	 * @param response
-	 */
-	@RequestMapping(value = "/loginValidation.do")
-    public @ResponseBody void loginValidation(@RequestParam Map<String, Object> param, HttpServletRequest request, HttpServletResponse response) {
-
-    	DjzComUtil.responseJSON(response, loginService.getLoginValidation(param));
-    }
 
 	/**
 	 * 비밀번호변경화면
@@ -124,91 +109,6 @@ public class LoginController {
     public @ResponseBody void getChangePassword(@RequestParam Map<String, Object> param, HttpServletRequest request, HttpServletResponse response) {
 
     	DjzComUtil.responseJSON(response, loginService.getChangePassword(param));
-    }
-
-    /**
-     * 중복로그인 확인
-     * Mapping Address : /dupLoginCheck.do
-     *
-     * @param userVO
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/dupLoginCheck.do")
-    public @ResponseBody String dupLoginCheck(@RequestParam Map<String, Object> param, HttpServletRequest request) {
-
-    	String userId = (String) param.get("userId");
-
-		if(DjzMultiLoginPreventor.findByLoginId(userId)) return "Y";
-
-		return "N";
-    }
-
-    /**
-     * 로그인 한다.
-	 * Mapping Address : /actionLogin.do
-     *
-     * @param userVO
-     * @param request
-     * @param model
-     * @param ratts
-     * @return
-     */
-	@RequestMapping(value = "/actionLogin.do")
-	public String actionLogin(@RequestParam Map<String, Object> param, HttpServletRequest request, ModelMap model, RedirectAttributes ratts) {
-
-		if(param == null) {
-			ratts.addFlashAttribute("statusCode", 888);
-			return "redirect:/login.do";
-		}
-
-		/* ■ 로그인 이력에 들어갈 값 */
-		param.put("ip", DjzComUtil.getClientIpAddr(request));
-
-		Map<String, Object> resMap = loginService.selectUserInfo(param);
-
-		int status = Integer.parseInt(String.valueOf(resMap.get("statusCode")));
-
-		if(status != 700) {
-			ratts.addFlashAttribute("statusCode", 888);
-			return "redirect:/login.do";
-		}
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> loginInfo = (Map<String, Object>) resMap.get("data");
-
-		request.getSession().setAttribute("loginInfo", loginInfo);
-
-		/* ■ 중복로그인 방지 */
-		DjzHttpSessionBindingListener listener = new DjzHttpSessionBindingListener();
-		request.getSession().setAttribute((String) loginInfo.get("userId"), listener);
-
-		return "redirect:/main/main.do";
-	}
-
-	/**
-	 * 로그아웃 한다.
-     * Mapping Address : /actionLogout.do
-	 *
-	 * @param request
-	 * @param model
-	 * @return
-	 */
-    @RequestMapping(value = "/actionLogout.do")
-    public String actionLogout(HttpServletRequest request, ModelMap model) {
-
-    	/* ■ 현재 언어 정보 가져오기 */
-    	String lang = "ko";
-    	Object obj = request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
-    	if(obj != null) lang = obj.toString();
-
-    	/* ■ 세션 제거 */
-    	removeSession(request);
-
-    	/* ■ 원래의 언어설정 다시 세션에 넣기 */
-    	request.getSession().setAttribute("lang", lang);
-
-		return "redirect:/login.do";
     }
 
     /**
