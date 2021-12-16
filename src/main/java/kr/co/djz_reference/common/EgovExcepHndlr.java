@@ -47,6 +47,7 @@ public class EgovExcepHndlr implements ExceptionHandler {
 	*/
 	@Override
 	public void occur(Exception ex, String packageName) {
-		LOGGER.debug("########## EgovExcepHndlr run ##########");
+		LOGGER.warn("########## EgovExcepHndlr run ##########");
+		LOGGER.warn("########## Exception : {}, packageName :{} ##########", ex.toString(), packageName);
 	}
 }
