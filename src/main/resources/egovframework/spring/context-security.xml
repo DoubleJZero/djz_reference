@@ -38,7 +38,7 @@
 			delete-cookies="true" />
 
 		<!-- CSRF start -->
-		<s:csrf />
+		<s:csrf disabled="true" />
 		<!-- CSRF end -->
 
 		<!-- 403 custom start -->

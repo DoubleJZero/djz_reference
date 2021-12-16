@@ -9,7 +9,7 @@
            <div class="b-bg">
                <i class="feather icon-trending-up"></i>
            </div>
-           <span class="b-title"> </span>
+           <span class="b-title" style="color:black;">Reference</span>
        </a>
     </div>
     <a class="mobile-menu" id="mobile-header" href="#!">

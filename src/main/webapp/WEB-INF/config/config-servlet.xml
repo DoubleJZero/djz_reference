@@ -27,6 +27,10 @@
 
     <mvc:annotation-driven />
 
+    <bean class = "org.springframework.web.servlet.view.BeanNameViewResolver">
+	    <property name="order" value="1" />
+	</bean>
+
     <bean name="excelView" class="kr.co.djz.common.DjzExcelViewMap" />
 
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
@@ -43,9 +47,10 @@
                 <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>
             </props>
         </property>
+        <property name="order" value="0" />
     </bean>
 
-    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
+    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="2"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/>
 

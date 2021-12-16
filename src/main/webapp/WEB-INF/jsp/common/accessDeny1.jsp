@@ -19,10 +19,10 @@
 					<h3 class="mb-4">
 						<spring:message code='login.errMsg12' />
 						<br>
-						<spring:message code='system.accessDenyMsg1' />
+						<spring:message code='system.msg11' />
 					</h3>
 
-					<button class="btn btn-primary shadow-2 mb-4" onclick="fn_createFormSubmit('/login.do', 'post');"><spring:message code="error.movetohome" /></button>
+					<button class="btn btn-primary shadow-2 mb-4" onclick="dynamicSubmit.createFormSubmit('/login.do', 'post');"><spring:message code="error.movetohome" /></button>
 				</div>
 			</div>
 		</div>

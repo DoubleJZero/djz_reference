@@ -75,7 +75,7 @@
 
 		userId = userId.replace(/\s/gi, "");
 
-		dynamicSubmit.createFormSubmit("/actionLogin.do", "post", "", "userId,userPw,${_csrf.parameterName}", userId+","+userPw+",${_csrf.token}", 3);
+		dynamicSubmit.createFormSubmit("/actionLogin.do", "post", "", "userId,userPw", userId+","+userPw, 2);
 	}
 
 	function fn_join(){

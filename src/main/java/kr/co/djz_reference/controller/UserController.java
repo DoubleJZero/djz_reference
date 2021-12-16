@@ -66,7 +66,7 @@ public class UserController {
 	 * 회원정보수정
 	 * Mapping Address : /user/getUserModify.do
 	 *
-	 * @param userVO
+	 * @param param
 	 * @param request
 	 * @param response
 	 */
@@ -80,7 +80,7 @@ public class UserController {
      * 자기소개서 등록
      * Mapping Address : /user/getInsertIntr.do
      *
-     * @param userResumeVO
+     * @param param
      * @param request
      * @param response
      */
@@ -94,7 +94,7 @@ public class UserController {
      * 자기소개서 조회
      * Mapping Address : /user/getIntr.do
      *
-     * @param userResumeVO
+     * @param param
      * @param request
      * @param response
      */
@@ -124,7 +124,7 @@ public class UserController {
 	 * 휴대폰 인증번호 생성 및 발송
 	 * Mapping Address : /user/getCreateCertiMobileNum.do
 	 *
-	 * @param userVO
+	 * @param param
 	 * @param request
 	 * @param response
 	 */
@@ -138,7 +138,7 @@ public class UserController {
 	 * 인증번호 확인
 	 * Mapping Address : /user/getCheckCertiNum.do
 	 *
-	 * @param userVO
+	 * @param param
 	 * @param request
 	 * @param response
 	 */
@@ -168,7 +168,7 @@ public class UserController {
 	 * 이메일 인증번호 생성 및 발송
 	 * Mapping Address : /user/getCreateCertiEmailNum.do
 	 *
-	 * @param userVO
+	 * @param param
 	 * @param request
 	 * @param response
 	 */

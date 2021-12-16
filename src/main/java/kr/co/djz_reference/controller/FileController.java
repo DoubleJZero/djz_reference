@@ -160,7 +160,7 @@ public class FileController {
 	 * 첨부파일 다운로드
 	 * Mapping Address : /fileDown.do
 	 *
-	 * @param atchflVO
+	 * @param param
 	 * @param request
 	 * @param response
 	 */
@@ -214,7 +214,7 @@ public class FileController {
 	 * 첨부파일 정보
 	 * Mapping Address : /getFileInfoAjax.do
 	 *
-	 * @param atchflVO
+	 * @param param
 	 * @param request
 	 * @param response
 	 */

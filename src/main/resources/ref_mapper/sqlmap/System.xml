@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SYSTEMSERVICE">
+
+	<select id="selectMenuList" parameterType="map" resultType="egovMap">
+		SELECT
+				MENU_SEQ
+				, MENU_GROUP
+				, PARENT_MENU_GROUP
+				, MENU_DEPTH
+				, MENU_ID
+				, MENU_NAME
+				, MENU_DESCRIPTION
+				, USE_YN
+				, MENU_URL
+				, MENU_ORDER
+		  FROM TB_MENU_M
+		 WHERE 1=1
+		<if test='searchMenuName != null and searchMenuName != ""'>
+		   AND MENU_NAME = #{searchMenuName}
+		</if>
+		 ORDER BY MENU_GROUP ASC, MENU_DEPTH ASC, IFNULL(MENU_ORDER,'') ASC
+	</select>
+
+	<select id="selectIsValidMenuIdCnt" parameterType="map" resultType="Integer">
+		SELECT COUNT(MENU_SEQ)
+		  FROM TB_MENU_M
+		 WHERE MENU_ID = #{menuId}
+	</select>
+
+	<insert id="insertMenu" parameterType="map">
+		INSERT INTO TB_MENU_M(
+				MENU_GROUP
+				, PARENT_MENU_GROUP
+				, MENU_DEPTH
+				, MENU_ID
+				, MENU_NAME
+				, MENU_DESCRIPTION
+				, USE_YN
+				, MENU_URL
+				, MENU_ORDER
+				, CREATE_USER
+				, CREATE_DATE
+				, UPDATE_USER
+				, UPDATE_DATE
+		) VALUES (
+				#{menuGroup}
+				, #{parentMenuGroup}
+				, #{menuDepth}
+				, #{menuId}
+				, #{menuName}
+				, #{menuDescription}
+				, #{useYn}
+				, #{menuUrl}
+				, #{menuOrder}
+				, #{createUser}
+				, NOW()
+				, #{updateUser}
+				, NOW()
+		)
+	</insert>
+
+	<update id="updateMenu" parameterType="map">
+		UPDATE TB_MENU_M
+		   SET
+		   		MENU_GROUP			= #{menuGroup}
+				, PARENT_MENU_GROUP	= #{parentMenuGroup}
+				, MENU_DEPTH		= #{menuDepth}
+				, MENU_ID			= #{menuId}
+				, MENU_NAME			= #{menuName}
+				, MENU_DESCRIPTION	= #{menuDescription}
+				, USE_YN			= #{useYn}
+				, MENU_URL			= #{menuUrl}
+				, MENU_ORDER		= #{menuOrder}
+	     	  	, UPDATE_USER		= #{updateUser}
+	     	  	, UPDATE_DATE		= NOW()
+		 WHERE MENU_SEQ = #{menuSeq}
+	</update>
+
+	<delete id="deleteMenu" parameterType="map">
+		DELETE FROM TB_MENU_M
+		 WHERE MENU_SEQ = #{menuSeq}
+	</delete>
+</mapper>

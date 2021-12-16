@@ -128,7 +128,7 @@
 			    	 * 702 : 인증번호 불일치
 			    	 */
 					if(data.statusCode == 700){
-						swal('확인 되었습니다.').then((ok)=>{
+						swal('확인 되었습니다.',{closeOnClickOutside: false}).then((ok)=>{
 							if(ok){
 								if(!checkValid.isCheckValueVaild($("#mobile",opener.document).val())){
 									$("#mobile1",opener.document).val($("#mobile").val());

@@ -82,7 +82,7 @@ public class CommonController {
      * 아이디 중복체크
      * Mapping Address : /getIsIdDupCheck.do
      *
-     * @param userVO
+     * @param param
      * @param request
      * @param response
      */
@@ -96,7 +96,7 @@ public class CommonController {
      * 휴대폰번호 중복체크
      * Mapping Address : /getIsMobileDupCheck.do
      *
-     * @param userVO
+     * @param param
      * @param request
      * @param response
      */
@@ -110,7 +110,7 @@ public class CommonController {
      * 이메일 중복체크
      * Mapping Address : /getIsEmailDupCheck.do
      *
-     * @param userVO
+     * @param param
      * @param request
      * @param response
      */
