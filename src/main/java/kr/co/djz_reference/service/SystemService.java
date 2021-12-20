@@ -1,7 +1,11 @@
 package kr.co.djz_reference.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 //import org.slf4j.Logger;
@@ -183,4 +187,558 @@ public class SystemService extends DjzCbsService {
 
 		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
 	}
+
+	/**
+	 * 권한 조회
+	 *
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> getAuthList(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 705 : 조회결과 없음
+    	 */
+		List<Map<String, Object>> menuList = mapper.selectList(serviceId+".selectAuthList", param);
+
+		if(menuList == null || menuList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), menuList);
+	}
+
+	/**
+	 * 권한 아이디 유효성 검사
+	 *
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> getIsValidAuthId(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 706 : 해당 메뉴ID 이미 사용중
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String authId = (String) param.get("authId");
+
+		if(StringUtils.isBlank(authId)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		int cnt = mapper.selectOne(serviceId+".selectIsValidAuthIdCnt", param);
+
+		if(cnt != 0) return DjzComUtil.responseMap(DjzHttpStatus.ETC_FIRST.getStatusCode());
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 권한 등록
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getInsertAuth(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String authId = (String) param.get("authId");
+		String authDesc = (String) param.get("authDesc");
+
+		if(StringUtils.isBlank(authId) || StringUtils.isBlank(authDesc)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+		param.put("createUser", userInfo.get("userId"));
+		param.put("updateUser", userInfo.get("userId"));
+
+		mapper.insert(serviceId+".insertAuth", param);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 권한 수정
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getUpdateAuth(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String authId = (String) param.get("authId");
+		String orgAuthId = (String) param.get("orgAuthId");
+		String authDesc = (String) param.get("authDesc");
+
+
+		if(DjzComUtil.isStrNull(authId) || StringUtils.isBlank(orgAuthId) || StringUtils.isBlank(authDesc)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+		param.put("updateUser", userInfo.get("userId"));
+
+		mapper.update(serviceId+".updateAuth", param);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 권한 삭제
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getDeleteAuth(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String authId = String.valueOf(param.get("authId"));
+
+		if(DjzComUtil.isStrNull(authId)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		/* ■ 약어 deleteGroupAuthCasecadeAuthId, deleteAuthMenuCasecadeAuthId */
+		mapper.delete(serviceId+".deleteGroupAuthCai", param);
+		mapper.delete(serviceId+".deleteAuthMenuCai", param);
+		mapper.delete(serviceId+".deleteAuth", param);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 그룹 조회
+	 *
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> getGroupList(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 705 : 조회결과 없음
+    	 */
+		List<Map<String, Object>> menuList = mapper.selectList(serviceId+".selectGroupList", param);
+
+		if(menuList == null || menuList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), menuList);
+	}
+
+	/**
+	 * 그룹 등록
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getInsertGroup(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String groupName = (String) param.get("groupName");
+
+		if(StringUtils.isBlank(groupName)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+		param.put("createUser", userInfo.get("userId"));
+		param.put("updateUser", userInfo.get("userId"));
+
+		mapper.insert(serviceId+".insertGroup", param);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 그룹 수정
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getUpdateGroup(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String groupId = String.valueOf(param.get("groupId"));
+		String groupName = (String) param.get("groupName");
+
+		if(DjzComUtil.isStrNull(groupId) || StringUtils.isBlank(groupName)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+		param.put("updateUser", userInfo.get("userId"));
+
+		mapper.update(serviceId+".updateGroup", param);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 그룹 삭제
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getDeleteGroup(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String groupId = String.valueOf(param.get("groupId"));
+
+		if(DjzComUtil.isStrNull(groupId)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		/* ■ 약어 deleteGroupAuthCasecadeGroupId, deleteGroupMemberCasecadeGroupId */
+		mapper.delete(serviceId+".deleteGroupAuthCgi", param);
+		mapper.delete(serviceId+".deleteGroupMemberCgi", param);
+		mapper.delete(serviceId+".deleteGroup", param);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 그룹권한조회
+	 *
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> getGroupAuthList(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 705 : 조회결과 없음
+    	 */
+		List<Map<String, Object>> menuList = mapper.selectList(serviceId+".selectGroupAuthList", param);
+
+		if(menuList == null || menuList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), menuList);
+	}
+
+	/**
+	 * 그룹 권한 등록
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getInsertGroupAuth(Map<String, Object> param, HttpServletRequest request) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 * 704 : 중복
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String authId = (String) param.get("authId");
+
+		if(StringUtils.isBlank(authId)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		int isDupCnt = mapper.selectOne(serviceId+".selectIsDupGroupAuthCnt", param);
+
+		if(isDupCnt != 0) return DjzComUtil.responseMap(DjzHttpStatus.DUPLICATE.getStatusCode());
+
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+		param.put("createUser", userInfo.get("userId"));
+		param.put("updateUser", userInfo.get("userId"));
+
+		mapper.insert(serviceId+".insertGroupAuth", param);
+
+		setSessionUserAuthMenu(request);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 그룹 권한 삭제
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getDeleteGroupAuth(Map<String, Object> param, HttpServletRequest request) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 706 : 삭제할 데이터 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String authIds = (String) param.get("authIds");
+		String isDels = (String) param.get("isDels");
+
+		if(StringUtils.isBlank(authIds) || StringUtils.isBlank(isDels)) return DjzComUtil.responseMap(DjzHttpStatus.ETC_FIRST.getStatusCode());
+
+		String[] authIdArr = authIds.split(",");
+		String[] isDelArr = isDels.split(",");
+
+		boolean isNotDel = true;
+
+		for(int i = 0; i < authIdArr.length; i++) {
+			if("Y".equals(isDelArr[i])) {
+				param.put("authId", authIdArr[i]);
+				mapper.delete(serviceId+".deleteGroupAuth", param);
+				isNotDel = false;
+			}
+		}
+
+		if(isNotDel) return DjzComUtil.responseMap(DjzHttpStatus.ETC_FIRST.getStatusCode());
+
+		setSessionUserAuthMenu(request);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 그룹 멤버 사용자 조회
+	 *
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> getUserSearchList(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 705 : 조회결과 없음
+    	 */
+		List<Map<String, Object>> userList = mapper.selectList(serviceId+".selectUserSearchList", param);
+
+		if(userList == null || userList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), userList);
+	}
+
+	/**
+	 * 그룹멤버조회
+	 *
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> getGroupMemberList(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 705 : 조회결과 없음
+    	 */
+		List<Map<String, Object>> menuList = mapper.selectList(serviceId+".selectGroupMemberList", param);
+
+		if(menuList == null || menuList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), menuList);
+	}
+
+	/**
+	 * 그룹 멤버 등록
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getInsertGroupMember(Map<String, Object> param, HttpServletRequest request) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 * 704 : 중복
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String userId = (String) param.get("userId");
+
+		if(StringUtils.isBlank(userId)) return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		int isDupCnt = mapper.selectOne(serviceId+".selectIsDupGroupMemberCnt", param);
+
+		if(isDupCnt != 0) return DjzComUtil.responseMap(DjzHttpStatus.DUPLICATE.getStatusCode());
+
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+		param.put("createUser", userInfo.get("userId"));
+		param.put("updateUser", userInfo.get("userId"));
+
+		mapper.insert(serviceId+".insertGroupMember", param);
+
+		setSessionUserAuthMenu(request);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 그룹 멤버 삭제
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getDeleteGroupMember(Map<String, Object> param, HttpServletRequest request) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 706 : 삭제할 데이터 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String userIds = (String) param.get("userIds");
+		String isDels = (String) param.get("isDels");
+
+		if(StringUtils.isBlank(userIds) || StringUtils.isBlank(isDels)) return DjzComUtil.responseMap(DjzHttpStatus.ETC_FIRST.getStatusCode());
+
+		String[] userIdArr = userIds.split(",");
+		String[] isDelArr = isDels.split(",");
+
+		boolean isNotDel = true;
+
+		for(int i = 0; i < userIdArr.length; i++) {
+			if("Y".equals(isDelArr[i])) {
+				param.put("userId", userIdArr[i]);
+				mapper.delete(serviceId+".deleteGroupMember", param);
+				isNotDel = false;
+			}
+		}
+
+		if(isNotDel) return DjzComUtil.responseMap(DjzHttpStatus.ETC_FIRST.getStatusCode());
+
+		setSessionUserAuthMenu(request);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 메뉴권한관리 조회
+	 *
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> getAuthMenuList(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 705 : 조회결과 없음
+    	 */
+		int cnt = mapper.selectOne(serviceId+".selectAuthMenuCnt", param);
+
+		List<Map<String, Object>> list = null;
+
+		if(cnt == 0) list = mapper.selectList(serviceId+".selectAuthMenuList1", param);
+		else list = mapper.selectList(serviceId+".selectAuthMenuList2", param);
+
+		if(list == null || list.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), list);
+	}
+
+	/**
+	 * 메뉴권한관리 수정
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getUpdateAuthMenu(Map<String, Object> param, HttpServletRequest request) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String authId = (String) param.get("authId");
+		String useYn = (String) param.get("useYn");
+		String menuId = (String) param.get("menuId");
+		String roleC = (String) param.get("roleC");
+		String roleR = (String) param.get("roleR");
+		String roleU = (String) param.get("roleU");
+		String roleD = (String) param.get("roleD");
+		String roleE = (String) param.get("roleE");
+		String roleP = (String) param.get("roleP");
+
+		if(StringUtils.isBlank(useYn) || StringUtils.isBlank(menuId) || StringUtils.isBlank(roleC) || StringUtils.isBlank(roleR)
+				|| StringUtils.isBlank(roleU) || StringUtils.isBlank(roleD) || StringUtils.isBlank(roleE)
+				|| StringUtils.isBlank(roleP) || StringUtils.isBlank(authId))
+			return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		String[] useYnArr = useYn.split(",");
+		String[] menuIdArr = menuId.split(",");
+		String[] roleCArr = roleC.split(",");
+		String[] roleRArr = roleR.split(",");
+		String[] roleUArr = roleU.split(",");
+		String[] roleDArr = roleD.split(",");
+		String[] roleEArr = roleE.split(",");
+		String[] rolePArr = roleP.split(",");
+
+		Map<String, Object> saveMap = new HashMap<String, Object>();
+
+		saveMap.put("authId", param.get("authId"));
+
+		for(int i = 0; i < useYnArr.length; i++) {
+			saveMap.put("useYn", useYnArr[i]);
+			saveMap.put("menuId", menuIdArr[i]);
+			saveMap.put("roleC", roleCArr[i]);
+			saveMap.put("roleR", roleRArr[i]);
+			saveMap.put("roleU", roleUArr[i]);
+			saveMap.put("roleD", roleDArr[i]);
+			saveMap.put("roleE", roleEArr[i]);
+			saveMap.put("roleP", rolePArr[i]);
+
+			mapper.delete(serviceId+".deleteAuthMenu", saveMap);
+			mapper.insert(serviceId+".insertAuthMenu", saveMap);
+		}
+
+		setSessionUserAuthMenu(request);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 권한 변경으로 인한 세션 권한정보 변경
+	 *
+	 * @param request
+	 */
+	void setSessionUserAuthMenu(HttpServletRequest request) {
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+
+		List<Map<String, Object>> authList = mapper.selectList("LOGINSERVICE.selectUserAuthList", userInfo);
+
+		List<String> strList = new ArrayList<String>();
+		Map<String, Object> userAuthMenu = new HashMap<String, Object>();
+
+		if(authList != null && authList.size() != 0) {
+			for(Map<String, Object> map : authList) {
+				String authId = (String) map.get("authId");
+
+				if(!StringUtils.isBlank(authId)) strList.add(authId);
+			}
+
+			userAuthMenu.put("authList", strList);
+
+			List<Map<String, Object>> authMenuList = mapper.selectList("LOGINSERVICE.selectUserAuthMenuList", userAuthMenu);
+
+			for(Map<String, Object> authMenu : authMenuList) {
+				String menuId = (String) authMenu.get("menuId");
+				if(!StringUtils.isBlank(menuId)) userAuthMenu.put(menuId, authMenu);
+			}
+
+		}
+
+		request.getSession().setAttribute("userAuthInfo", userAuthMenu);
+	}
+
 }

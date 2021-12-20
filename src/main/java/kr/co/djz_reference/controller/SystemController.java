@@ -1,5 +1,6 @@
 package kr.co.djz_reference.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,7 +89,7 @@ public class SystemController {
 	 * @return
 	 */
 	@RequestMapping(value = "/system/popValidMenuId.do")
-	public String popUserMobileModify(@RequestParam Map<String, Object> param, HttpServletRequest request, ModelMap model) {
+	public String popValidMenuId(@RequestParam Map<String, Object> param, HttpServletRequest request, ModelMap model) {
 
 		return "system/popValidMenuId";
 	}
@@ -189,4 +190,369 @@ public class SystemController {
 
 		return mav;
 	}
+
+    /**
+	 * 권한 관리
+	 * Mapping Address : /system/auth.do
+	 *
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/system/auth.do")
+	public String auth(HttpServletRequest request, ModelMap model) {
+
+		return "system/auth";
+	}
+
+	/**
+	 * 권한 조회
+	 * Mapping Address : /system/getAuthList.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getAuthList.do")
+    public @ResponseBody void getAuthList(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getAuthList(param));
+    }
+
+	/**
+	 * 권한 아이디 유효성
+	 * Mapping Address : /system/popValidAuthId.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/system/popValidAuthId.do")
+	public String popValidAuthId(@RequestParam Map<String, Object> param, HttpServletRequest request, ModelMap model) {
+
+		return "system/popValidAuthId";
+	}
+
+	/**
+	 * 권한 아이디 유효성 검사
+	 * Mapping Address : /system/getIsValidAuthId.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getIsValidAuthId.do")
+    public @ResponseBody void getIsValidAuthId(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getIsValidAuthId(param));
+    }
+
+	/**
+	 * 권한 등록
+	 * Mapping Address : /system/getInsertAuth.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getInsertAuth.do")
+    public @ResponseBody void getInsertAuth(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getInsertAuth(param));
+    }
+
+	/**
+	 * 권한 수정
+	 * Mapping Address : /system/getUpdateAuth.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getUpdateAuth.do")
+    public @ResponseBody void getUpdateAuth(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getUpdateAuth(param));
+    }
+
+	/**
+	 * 권한 삭제
+	 * Mapping Address : /system/getDeleteAuth.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getDeleteAuth.do")
+    public @ResponseBody void getDeleteAuth(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getDeleteAuth(param));
+    }
+
+	/**
+	 * 그룹 관리
+	 * Mapping Address : /system/group.do
+	 *
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/system/group.do")
+	public String group(HttpServletRequest request, ModelMap model) {
+
+		return "system/group";
+	}
+
+	/**
+	 * 그룹 조회
+	 * Mapping Address : /system/getGroupList.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getGroupList.do")
+    public @ResponseBody void getGroupList(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getGroupList(param));
+    }
+
+	/**
+	 * 그룹 등록
+	 * Mapping Address : /system/getInsertGroup.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getInsertGroup.do")
+    public @ResponseBody void getInsertGroup(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getInsertGroup(param));
+    }
+
+	/**
+	 * 그룹 수정
+	 * Mapping Address : /system/getUpdateGroup.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getUpdateGroup.do")
+    public @ResponseBody void getUpdateGroup(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getUpdateGroup(param));
+    }
+
+	/**
+	 * 그룹 삭제
+	 * Mapping Address : /system/getDeleteGroup.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getDeleteGroup.do")
+    public @ResponseBody void getDeleteGroup(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getDeleteGroup(param));
+    }
+
+	/**
+	 * 그룹 권한 관리
+	 * Mapping Address : /system/groupAuth.do
+	 *
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/system/groupAuth.do")
+	public String groupAuth(HttpServletRequest request, ModelMap model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		model.addAttribute("groupList", systemService.getGroupList(param).get("data"));
+
+		return "system/groupAuth";
+	}
+
+	/**
+	 * 그룹 권한 조회
+	 * Mapping Address : /system/getGroupAuthList.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getGroupAuthList.do")
+    public @ResponseBody void getGroupAuthList(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getGroupAuthList(param));
+    }
+
+	/**
+	 * 그룹 권한 등록
+	 * Mapping Address : /system/getInsertGroupAuth.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getInsertGroupAuth.do")
+    public @ResponseBody void getInsertGroupAuth(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getInsertGroupAuth(param, request));
+    }
+
+	/**
+	 * 그룹 권한 삭제
+	 * Mapping Address : /system/getDeleteGroupAuth.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getDeleteGroupAuth.do")
+    public @ResponseBody void getDeleteGroupAuth(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getDeleteGroupAuth(param, request));
+    }
+
+	/**
+	 * 그룹 멤버 관리
+	 * Mapping Address : /system/groupMember.do
+	 *
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/system/groupMember.do")
+	public String groupMember(HttpServletRequest request, ModelMap model) {
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		model.addAttribute("groupList", systemService.getGroupList(param).get("data"));
+
+		return "system/groupMember";
+	}
+
+	/**
+	 * 그룹 멤버 사용자 조회
+	 * Mapping Address : /system/getUserSearchList.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getUserSearchList.do")
+    public @ResponseBody void getUserSearchList(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getUserSearchList(param));
+    }
+
+	/**
+	 * 그룹 멤버 조회
+	 * Mapping Address : /system/getGroupMemberList.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getGroupMemberList.do")
+    public @ResponseBody void getGroupMemberList(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getGroupMemberList(param));
+    }
+
+	/**
+	 * 그룹 멤버 등록
+	 * Mapping Address : /system/getInsertGroupMember.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getInsertGroupMember.do")
+    public @ResponseBody void getInsertGroupMember(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getInsertGroupMember(param, request));
+    }
+
+	/**
+	 * 그룹 멤버 삭제
+	 * Mapping Address : /system/getDeleteGroupMember.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getDeleteGroupMember.do")
+    public @ResponseBody void getDeleteGroupMember(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getDeleteGroupMember(param, request));
+    }
+
+	/**
+     * 메뉴권한관리
+	 * Mapping Address : /system/authMenu.do
+     *
+     * @param request
+     * @param model
+     * @return
+     */
+	@RequestMapping(value = "/system/authMenu.do")
+	public String authMenu(HttpServletRequest request, ModelMap model) {
+
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		model.addAttribute("authList", systemService.getAuthList(param).get("data"));
+
+		return "system/authMenu";
+	}
+
+	/**
+	 * 메뉴권한관리 조회
+	 * Mapping Address : /system/getAuthMenuList.do
+	 *
+	 * @param functionVO
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getAuthMenuList.do")
+    public @ResponseBody void getAuthMenuList(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getAuthMenuList(param));
+    }
+
+	/**
+	 * 메뉴권한관리 수정
+	 * Mapping Address : /system/getUpdateAuthMenu.do
+	 *
+	 * @param functionVO
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getUpdateAuthMenu.do")
+    public @ResponseBody void getUpdateAuthMenu(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getUpdateAuthMenu(param, request));
+    }
 }

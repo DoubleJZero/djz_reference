@@ -1,6 +1,8 @@
 package kr.co.djz_reference.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -49,8 +51,34 @@ public class SecUserDetailsService extends DjzCbsService implements UserDetailsS
 
 				userDetails.setUserInfo(userInfo);
 
-				// 사용자 권한 select해서 받아온 List<String> 객체 주입
-				//userDetails.setAuthorities(mapper.selectUserAuthOne(inputUserId));
+				List<Map<String, Object>> authList = mapper.selectList(serviceId+".selectUserAuthList", param);
+
+				List<String> strList = new ArrayList<String>();
+				Map<String, Object> userAuthMenu = new HashMap<String, Object>();
+
+				if(authList == null || authList.size() == 0) {
+					userDetails.setAuthorities(null);
+					userDetails.setAuthList(null);
+				}else {
+					for(Map<String, Object> map : authList) {
+						String authId = (String) map.get("authId");
+
+						if(!StringUtils.isBlank(authId)) strList.add(authId);
+					}
+
+					userDetails.setAuthorities(strList);
+					userAuthMenu.put("authList", strList);
+
+					List<Map<String, Object>> authMenuList = mapper.selectList(serviceId+".selectUserAuthMenuList", userAuthMenu);
+
+					for(Map<String, Object> authMenu : authMenuList) {
+						String menuId = (String) authMenu.get("menuId");
+						if(!StringUtils.isBlank(menuId)) userAuthMenu.put(menuId, authMenu);
+					}
+
+					userDetails.setUserAuthMenu(userAuthMenu);
+				}
+
 			}
 		} else {
 			userDetails = (SecUserDetailsVO) principal;

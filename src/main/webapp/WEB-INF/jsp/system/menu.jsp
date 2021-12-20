@@ -34,9 +34,9 @@
 
 													<input type="text" id="searchMenuName" class="form-control custttscf" placeholder="<spring:message code="system.msg2" />" style="margin-right:5px; max-height:36px;" maxlength="30" />
 
-													<%-- <c:if test='${!empty sessionScope.curAuthInfo and curAuthInfo.r eq "Y"}'> --%>
+													<c:if test='${!empty sessionScope.curAuthInfo and curAuthInfo.r eq "Y"}'>
 														<button type="button" class="btn btn-primary btn-sm" onclick="fn_search()" style="min-width:60px;"><spring:message code='button.lookup' /></button>
-													<%-- </c:if> --%>
+													</c:if>
 												</div>
 											</div>
                                         </div>
@@ -50,16 +50,16 @@
 
 												<div class="col-md-4">
 													<div style="text-align: right;" class="mb-3">
-														<%-- <c:if test='${!empty sessionScope.curAuthInfo and curAuthInfo.d eq "Y"}'> --%>
+														<c:if test='${!empty sessionScope.curAuthInfo and curAuthInfo.roleD eq "Y"}'>
 															<button type="button" class="btn btn-danger btn-sm" onclick="fn_delete()" style="margin-right: 0.5px;"><spring:message code='button.delete' /></button>
-														<%-- </c:if> --%>
+														</c:if>
 														<button type="button" class="btn btn-dark btn-sm" onclick="fn_init()" style="margin-right: 0.5px;"><spring:message code='button.init' /></button>
-														<%-- <c:if test='${!empty sessionScope.curAuthInfo and (curAuthInfo.c eq "Y" or curAuthInfo.u eq "Y")}'> --%>
+														<c:if test='${!empty sessionScope.curAuthInfo and (curAuthInfo.roleC eq "Y" or curAuthInfo.roleU eq "Y")}'>
 															<button type="button" class="btn btn-primary btn-sm" onclick="fn_save()" style="margin-right: 0.5px;"><spring:message code='button.save' /></button>
-														<%-- </c:if> --%>
-														<%-- <c:if test='${!empty sessionScope.curAuthInfo and curAuthInfo.e eq "Y"}'> --%>
+														</c:if>
+														<c:if test='${!empty sessionScope.curAuthInfo and curAuthInfo.roleE eq "Y"}'>
 															<button type="button" class="btn btn-success btn-sm" onclick="dynamicSubmit.createFormSubmit('/system/getMenuExcel.do', 'post')" style="margin-right: 0.5px;"><spring:message code='button.excel' /></button>
-														<%-- </c:if> --%>
+														</c:if>
 													</div>
 
 													<div class="input-group mb-1" style="background: #fff">

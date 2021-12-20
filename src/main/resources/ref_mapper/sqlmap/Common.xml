@@ -22,17 +22,61 @@
 	</select>
 
 	<select id="selectMenuInfo" parameterType="map" resultType="egovMap">
-		  SELECT
-					MENU_SEQ
-					, MENU_GROUP
-					, PARENT_MENU_GROUP
-					, MENU_DEPTH
-					, MENU_ID
-					, MENU_NAME
-					, MENU_URL
-					, MENU_ORDER
-		  FROM TB_MENU_M
-		 WHERE USE_YN = 'Y'
+		SELECT
+				A.MENU_SEQ
+				, A.MENU_GROUP
+				, A.PARENT_MENU_GROUP
+				, A.MENU_DEPTH
+				, A.MENU_ID
+				, A.MENU_NAME
+				, A.MENU_URL
+				, A.MENU_ORDER
+		  FROM (
+		  		SELECT
+						MENU_SEQ
+						, MENU_GROUP
+						, PARENT_MENU_GROUP
+						, MENU_DEPTH
+						, MENU_ID
+						, MENU_NAME
+						, MENU_URL
+						, MENU_ORDER
+				  FROM TB_MENU_M
+				 WHERE MENU_ID IN (SELECT DISTINCT MENU_ID
+				 					 FROM TB_AUTH_MENU
+				 					WHERE USE_YN = 'Y'
+				 				  <if test='authList != null'>
+								   	  AND AUTH_ID IN
+										<foreach collection="authList" item="auth" open="(" close=")" separator=",">
+											#{auth}
+										</foreach>
+								  </if>
+				 					)
+				   AND USE_YN = 'Y'
+				 UNION ALL
+				SELECT
+						MENU_SEQ
+						, MENU_GROUP
+						, PARENT_MENU_GROUP
+						, MENU_DEPTH
+						, MENU_ID
+						, MENU_NAME
+						, MENU_URL
+						, MENU_ORDER
+				  FROM TB_MENU_M
+				 WHERE MENU_GROUP IN (SELECT DISTINCT MENU_GROUP FROM TB_MENU_M WHERE MENU_ID IN (SELECT DISTINCT MENU_ID
+				 																					FROM TB_AUTH_MENU
+				 																				   WHERE USE_YN = 'Y'
+				 																				 <if test='authList != null'>
+																								   	 AND AUTH_ID IN
+																										<foreach collection="authList" item="auth" open="(" close=")" separator=",">
+																											#{auth}
+																										</foreach>
+																								 </if>
+				 																				     ))
+				   AND PARENT_MENU_GROUP = ''
+				   AND USE_YN = 'Y'
+		  ) A
 		 ORDER BY MENU_GROUP ASC, MENU_DEPTH ASC, IFNULL(MENU_ORDER,'') ASC
 	</select>
 </mapper>

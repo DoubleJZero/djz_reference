@@ -17,6 +17,8 @@ public class SecUserDetailsVO implements UserDetails {
 	private String password; // PW
 	private List<GrantedAuthority> authorities; // 권한
 	private Map<String, Object> userInfo;
+	private List<String> authList; // 메뉴용 권한
+	private Map<String, Object> userAuthMenu; // 사용자별 메뉴 권한
 
 	private boolean isAccountNonExpired; // 계정 만료여부
 	private boolean isAccountNonLocked; // 계정 잠김여부
@@ -28,6 +30,14 @@ public class SecUserDetailsVO implements UserDetails {
 		this.isAccountNonLocked = true;
 		this.isCredentialsNonExpired = true;
 		this.isEnabled = true;
+	}
+
+	public List<String> getAuthList() {
+		return authList;
+	}
+
+	public void setAuthList(List<String> authList) {
+		this.authList = authList;
 	}
 
 	public void setUsername(String username) {
@@ -62,8 +72,10 @@ public class SecUserDetailsVO implements UserDetails {
 
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-		for (int i = 0; i < authList.size(); i++) {
-			authorities.add(new SimpleGrantedAuthority(authList.get(i)));
+		if(authList == null || authList.size() == 0) {
+			authorities = null;
+		} else {
+			for(String auth : authList) authorities.add(new SimpleGrantedAuthority(auth));
 		}
 
 		this.authorities = authorities;
@@ -113,5 +125,13 @@ public class SecUserDetailsVO implements UserDetails {
 
 	public Map<String, Object> getUserInfo() {
 		return userInfo;
+	}
+
+	public Map<String, Object> getUserAuthMenu() {
+		return userAuthMenu;
+	}
+
+	public void setUserAuthMenu(Map<String, Object> userAuthMenu) {
+		this.userAuthMenu = userAuthMenu;
 	}
 }

@@ -57,13 +57,23 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
 		String curMenuId = (String) param.get("curMenuId");
 
-		/*if(!DjzComUtil.isWhiteListUri(uri)) {
+		if(!DjzComUtil.isWhiteListUri(uri)) {
 			if(StringUtils.isBlank(curMenuId)) {
 				logger.warn("########## 사용자 비정상 접근 menuId : {} ##########", curMenuId);
 				response.sendRedirect("/accessDeny1.do");
 				return false;
 			}
-		}*/
+
+			Map<String, Object> userAuthMenu = UserDetailsHelper.getUserAuthMenu();
+			if(userAuthMenu.get(curMenuId) == null) {
+				logger.warn("########## 사용자 접근권한 없음 curMenuId : {} ##########", curMenuId);
+				response.sendRedirect("/accessDeny2.do");
+				return false;
+			}
+
+			/* ■ 현재 메뉴의 권한정보를 setting */
+			request.getSession().setAttribute("curAuthInfo", userAuthMenu.get(curMenuId));
+		}
 
 		if(param.get("curMenuGroup") != null) {
 			/* ■ 현재 속한 메인메뉴 */

@@ -82,4 +82,301 @@
 		DELETE FROM TB_MENU_M
 		 WHERE MENU_SEQ = #{menuSeq}
 	</delete>
+
+	<select id="selectAuthList" parameterType="map" resultType="egovMap">
+		SELECT
+				AUTH_ID
+				, AUTH_DESC
+		  FROM TB_AUTHORITY
+		 ORDER BY CREATE_DATE ASC
+	</select>
+
+	<select id="selectIsValidAuthIdCnt" parameterType="map" resultType="Integer">
+		SELECT COUNT(AUTH_ID)
+		  FROM TB_AUTHORITY
+		 WHERE AUTH_ID = #{authId}
+	</select>
+
+	<insert id="insertAuth" parameterType="map">
+		INSERT INTO TB_AUTHORITY(
+				AUTH_ID
+				, AUTH_DESC
+				, CREATE_USER
+			  	, CREATE_DATE
+			  	, UPDATE_USER
+			  	, UPDATE_DATE
+		) VALUES (
+				#{authId}
+				, #{authDesc}
+				, #{createUser}
+				, NOW()
+				, #{updateUser}
+				, NOW()
+		)
+	</insert>
+
+	<update id="updateAuth" parameterType="map">
+		UPDATE TB_AUTHORITY
+		   SET
+				AUTH_ID			= #{authId}
+				, AUTH_DESC			= #{authDesc}
+	     	  	, UPDATE_USER		= #{updateUser}
+	     	  	, UPDATE_DATE		= NOW()
+		 WHERE AUTH_ID = #{orgAuthId}
+	</update>
+
+	<delete id="deleteGroupAuthCai" parameterType="map">
+		DELETE FROM TB_GROUP_AUTH
+		 WHERE AUTH_ID = #{authId}
+	</delete>
+
+	<delete id="deleteAuthMenuCai" parameterType="map">
+		DELETE FROM TB_AUTH_MENU
+		 WHERE AUTH_ID = #{authId}
+	</delete>
+
+	<delete id="deleteAuth" parameterType="map">
+		DELETE FROM TB_AUTHORITY
+		 WHERE AUTH_ID = #{authId}
+	</delete>
+
+	<select id="selectGroupList" parameterType="map" resultType="egovMap">
+		SELECT
+				GROUP_ID
+				, GROUP_NAME
+		  FROM TB_GROUP
+		 ORDER BY CREATE_DATE ASC
+	</select>
+
+	<insert id="insertGroup" parameterType="map">
+		INSERT INTO TB_GROUP(
+				GROUP_NAME
+				, CREATE_USER
+				, CREATE_DATE
+				, UPDATE_USER
+				, UPDATE_DATE
+		) VALUES (
+				#{groupName}
+				, #{createUser}
+				, NOW()
+				, #{updateUser}
+				, NOW()
+		)
+	</insert>
+
+	<update id="updateGroup" parameterType="map">
+		UPDATE TB_GROUP
+		   SET
+		   		GROUP_NAME			= #{groupName}
+	     	  	, UPDATE_USER		= #{updateUser}
+	     	  	, UPDATE_DATE		= NOW()
+		 WHERE GROUP_ID = #{groupId}
+	</update>
+
+	<delete id="deleteGroupAuthCgi" parameterType="map">
+		DELETE FROM TB_GROUP_AUTH
+		 WHERE GROUP_ID = #{groupId}
+	</delete>
+
+	<delete id="deleteGroupMemberCgi" parameterType="map">
+		DELETE FROM TB_GROUP_MEMBER
+		 WHERE GROUP_ID = #{groupId}
+	</delete>
+
+	<delete id="deleteGroup" parameterType="map">
+		DELETE FROM TB_GROUP
+		 WHERE GROUP_ID = #{groupId}
+	</delete>
+
+	<select id="selectGroupAuthList" parameterType="map" resultType="egovMap">
+		SELECT
+				A.GROUP_ID
+				, A.AUTH_ID
+				, B.AUTH_DESC
+		  FROM TB_GROUP_AUTH A
+		  LEFT OUTER JOIN TB_AUTHORITY B
+					   ON A.AUTH_ID = B.AUTH_ID
+		 WHERE A.GROUP_ID = #{groupId}
+		 ORDER BY B.CREATE_DATE ASC
+	</select>
+
+	<select id="selectIsDupGroupAuthCnt" parameterType="map" resultType="Integer">
+		SELECT COUNT(GROUP_ID)
+		  FROM TB_GROUP_AUTH
+		 WHERE AUTH_ID = #{authId}
+	</select>
+
+	<insert id="insertGroupAuth" parameterType="map">
+		INSERT INTO TB_GROUP_AUTH(
+				GROUP_ID
+				, AUTH_ID
+		) VALUES (
+				#{groupId}
+				, #{authId}
+		)
+	</insert>
+
+	<delete id="deleteGroupAuth" parameterType="map">
+		DELETE FROM TB_GROUP_AUTH
+		 WHERE AUTH_ID = #{authId}
+	</delete>
+
+	<select id="selectUserSearchList" parameterType="map" resultType="egovMap">
+		SELECT
+				USER_ID
+				, USER_PW
+				, USER_NAME
+				, ZIPCODE
+				, ADDRESS
+				, ADDRESS_DETAIL
+				, EMAIL
+				, MOBILE
+		  FROM TB_USER_M
+		 WHERE 1=1
+		<if test='searchUserName != null and searchUserName != ""'>
+		   AND USER_NAME LIKE CONCAT('%',#{searchUserName},'%')
+		</if>
+		 ORDER BY CREATE_DATE ASC
+	</select>
+
+	<select id="selectGroupMemberList" parameterType="map" resultType="egovMap">
+		SELECT
+				A.GROUP_ID
+				, A.USER_ID
+				, B.USER_NAME
+				, B.ZIPCODE
+				, B.ADDRESS
+				, B.ADDRESS_DETAIL
+				, B.EMAIL
+				, B.MOBILE
+		  FROM TB_GROUP_MEMBER A
+		  LEFT OUTER JOIN TB_USER_M B
+					   ON A.USER_ID = B.USER_ID
+		 WHERE A.GROUP_ID = #{groupId}
+		 ORDER BY B.CREATE_DATE ASC
+	</select>
+
+	<select id="selectIsDupGroupMemberCnt" parameterType="map" resultType="Integer">
+		SELECT COUNT(GROUP_ID)
+		  FROM TB_GROUP_MEMBER
+		 WHERE USER_ID = #{userId}
+	</select>
+
+	<insert id="insertGroupMember" parameterType="map">
+		INSERT INTO TB_GROUP_MEMBER(
+				GROUP_ID
+				, USER_ID
+		) VALUES (
+				#{groupId}
+				, #{userId}
+		)
+	</insert>
+
+	<delete id="deleteGroupMember" parameterType="map">
+		DELETE FROM TB_GROUP_MEMBER
+		 WHERE USER_ID = #{userId}
+	</delete>
+
+	<select id="selectAuthMenuCnt" parameterType="map" resultType="Integer">
+		SELECT COUNT(AUTH_ID) AS CNT
+		  FROM TB_AUTH_MENU
+		 WHERE AUTH_ID = #{authId}
+	</select>
+
+	<select id="selectAuthMenuList1" parameterType="map" resultType="egovMap">
+		SELECT
+				#{authId} AS AUTH_ID
+				, MENU_ID
+				, MENU_NAME
+				, MENU_GROUP
+				, MENU_DEPTH
+				, MENU_ORDER
+				, 'N' AS USE_YN
+				, 'N' AS ROLE_C
+				, 'N' AS ROLE_R
+				, 'N' AS ROLE_U
+				, 'N' AS ROLE_D
+				, 'N' AS ROLE_E
+				, 'N' AS ROLE_P
+		  FROM TB_MENU_M
+		 ORDER BY MENU_GROUP ASC, MENU_DEPTH ASC, IFNULL(MENU_ORDER, '') ASC
+	</select>
+
+	<select id="selectAuthMenuList2" parameterType="map" resultType="egovMap">
+		SELECT
+				Z.AUTH_ID
+				, Z.MENU_ID
+				, Z.MENU_NAME
+				, Z.MENU_DEPTH
+				, Z.USE_YN
+				, Z.ROLE_C
+				, Z.ROLE_R
+				, Z.ROLE_U
+				, Z.ROLE_D
+				, Z.ROLE_E
+				, Z.ROLE_P
+		  FROM (
+				SELECT
+						IFNULL(B.AUTH_ID, #{authId}) AS AUTH_ID
+						, A.MENU_ID
+						, A.MENU_NAME
+						, A.MENU_GROUP
+						, A.MENU_DEPTH
+						, IFNULL(A.MENU_ORDER, '') AS MENU_ORDER
+						, IFNULL(B.USE_YN, 'N') AS USE_YN
+						, IFNULL(B.ROLE_C, 'N') AS ROLE_C
+						, IFNULL(B.ROLE_R, 'N') AS ROLE_R
+						, IFNULL(B.ROLE_U, 'N') AS ROLE_U
+						, IFNULL(B.ROLE_D, 'N') AS ROLE_D
+						, IFNULL(B.ROLE_E, 'N') AS ROLE_E
+						, IFNULL(B.ROLE_P, 'N') AS ROLE_P
+				  FROM TB_MENU_M A
+				  LEFT OUTER JOIN (
+				  					SELECT
+				  							AUTH_ID
+				  							, MENU_ID
+				  							, USE_YN
+				  							, ROLE_C
+				  							, ROLE_R
+				  							, ROLE_U
+				  							, ROLE_D
+				  							, ROLE_E
+				  							, ROLE_P
+				  					  FROM TB_AUTH_MENU
+				  					 WHERE AUTH_ID = #{authId}
+				  					) B
+							   ON A.MENU_ID = B.MENU_ID
+				) Z
+		 ORDER BY Z.MENU_GROUP ASC, Z.MENU_DEPTH ASC, Z.MENU_ORDER ASC
+	</select>
+
+	<delete id="deleteAuthMenu" parameterType="map">
+		DELETE FROM TB_AUTH_MENU
+		 WHERE AUTH_ID = #{authId}
+		   AND MENU_ID = #{menuId}
+	</delete>
+
+	<insert id="insertAuthMenu" parameterType="map">
+		INSERT INTO TB_AUTH_MENU(
+				AUTH_ID
+				, MENU_ID
+				, USE_YN
+				, ROLE_C
+				, ROLE_R
+				, ROLE_U
+				, ROLE_D
+				, ROLE_E
+				, ROLE_P
+		) VALUES (
+				#{authId}
+				, #{menuId}
+				, #{useYn}
+				, #{roleC}
+				, #{roleR}
+				, #{roleU}
+				, #{roleD}
+				, #{roleE}
+				, #{roleP}
+		)
+	</insert>
 </mapper>

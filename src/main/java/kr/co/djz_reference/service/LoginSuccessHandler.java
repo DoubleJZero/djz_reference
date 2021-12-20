@@ -23,6 +23,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		SecUserDetailsVO userDetail = (SecUserDetailsVO) authentication.getPrincipal();
 
 		request.getSession().setAttribute("loginInfo", userDetail.getUserInfo());
+		request.getSession().setAttribute("userAuthInfo", userDetail.getUserAuthMenu());
 
 		response.sendRedirect("/main/main.do");
 	}

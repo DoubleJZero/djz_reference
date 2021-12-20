@@ -58,4 +58,13 @@ public class UserDetailsHelper {
     public static Boolean isAuthenticated() {
     	return userDetailService.isAuthenticated();
     }
+
+    /**
+     * 메뉴별 기능정보를 가져온다.
+     *
+     * @return 메뉴별 기능정보
+     */
+    public static Map<String, Object> getUserAuthMenu() {
+    	return userDetailService.getUserAuthMenu();
+    }
 }

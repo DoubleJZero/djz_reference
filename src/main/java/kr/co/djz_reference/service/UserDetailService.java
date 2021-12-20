@@ -49,4 +49,16 @@ public class UserDetailService {
 			else return true;
 		}
     }
+
+    /**
+     * 메뉴별 기능정보를 가져온다.
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> getUserAuthMenu() {
+    	if (RequestContextHolder.getRequestAttributes() == null) return null;
+
+    	return (Map<String, Object>) RequestContextHolder.getRequestAttributes().getAttribute("userAuthInfo", RequestAttributes.SCOPE_SESSION);
+    }
 }

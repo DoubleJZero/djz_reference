@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ import kr.co.djz.service.DjzCbsService;
 import kr.co.djz.utility.DjzComUtil;
 import kr.co.djz.utility.DjzDateUtil;
 import kr.co.djz_reference.common.UserDetailsHelper;
+import kr.co.djz_reference.entity.SecUserDetailsVO;
 
 /**
  * CommonService
@@ -65,6 +68,19 @@ public class CommonService extends DjzCbsService {
 	 * @return 메뉴목록
 	 */
 	public List<Map<String, Object>> getMenuInfo(Map<String, Object> param) {
+
+		if(SecurityContextHolder.getContext().getAuthentication() != null) {
+			SecUserDetailsVO principal = (SecUserDetailsVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if(principal != null) {
+				param.put("authList", principal.getAuthList());
+			} else {
+				logger.warn("########## 권한 또는 그룹설정이 되지 않음 ##########");
+				return new ArrayList<Map<String, Object>>();
+			}
+		} else {
+			logger.warn("########## 권한 또는 그룹설정이 되지 않음 ##########");
+			return new ArrayList<Map<String, Object>>();
+		}
 
 		return mapper.selectList(serviceId+".selectMenuInfo", param);
 	}
