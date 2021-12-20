@@ -21,7 +21,7 @@ import kr.co.djz_reference.common.UserDetailsHelper;
 /**
  * SystemService
  *
- * @author yjjung
+ * @author DoubleJZero
  * @since 2021.12.16
  * @version 1.0
  * @see
@@ -29,7 +29,7 @@ import kr.co.djz_reference.common.UserDetailsHelper;
  * &lt;&lt; 개정이력(Modification Information) &gt;&gt;
  *   수정일               수정자               수정내용
  *  ---------   ---------   -------------------------------
- *  2021.12.16    yjjung      최초생성
+ *  2021.12.16    DoubleJZero      최초생성
  *
  * Copyright (C) by Djz All right reserved.
  * </pre>

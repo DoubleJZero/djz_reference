@@ -18,6 +18,24 @@ import org.springframework.security.core.AuthenticationException;
 import kr.co.djz.utility.DjzComUtil;
 import kr.co.djz_reference.entity.SecUserDetailsVO;
 
+/**
+ * LoginAuthenticationProvider
+ *
+ * @author DoubleJZero
+ * @since 2021.12.10
+ * @version 1.0
+ * @see
+ *
+ *      <pre>
+ * &lt;&lt; 개정이력(Modification Information) &gt;&gt;
+ *   수정일               수정자               수정내용
+ *  ---------   ---------   -------------------------------
+ *  2021.12.10    DoubleJZero      최초생성
+ *
+ *
+ * Copyright (C) by Djz All right reserved.
+ *      </pre>
+ */
 public class LoginAuthenticationProvider implements AuthenticationProvider {
 
 	/** Logger */
