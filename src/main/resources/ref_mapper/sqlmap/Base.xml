@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BASESERVICE">
+
+	<select id="selectUserList" parameterType="map" resultType="egovMap">
+		SELECT
+				USER_ID
+				, USER_PW
+				, USER_NAME
+				, ZIPCODE
+				, ADDRESS
+				, ADDRESS_DETAIL
+				, EMAIL
+				, MOBILE
+				, SMS_YN
+				, EMAIL_YN
+				, CHANGE_PW_DATE
+				, LAST_LOGIN_DATE
+		  FROM TB_USER_M
+		 WHERE 1=1
+		<if test='searchUserName != null and searchUserName != ""'>
+		   AND USER_NAME = #{searchUserName}
+		</if>
+		 ORDER BY CREATE_DATE ASC
+	</select>
+
+	<insert id="insertUser" parameterType="map">
+		INSERT INTO TB_USER_M(
+				USER_ID
+				, USER_PW
+				, USER_NAME
+				, ZIPCODE
+				, ADDRESS
+				, ADDRESS_DETAIL
+				, EMAIL
+				, MOBILE
+				, SMS_YN
+				, EMAIL_YN
+				, CHANGE_PW_DATE
+				, LAST_LOGIN_DATE
+				, CREATE_USER
+				, CREATE_DATE
+				, UPDATE_USER
+				, UPDATE_DATE
+		) VALUES (
+				#{userId}
+				, #{userPw}
+				, #{userName}
+				, #{zipcode}
+				, #{address}
+				, #{addressDetail}
+				, #{email}
+				, #{mobile}
+				, #{smsYn}
+				, #{emailYn}
+				, #{changePwDate}
+				, DATE_FORMAT(NOW(), '%Y-%m-%d')
+				, #{createUser}
+				, NOW()
+				, #{updateUser}
+				, NOW()
+		)
+	</insert>
+
+	<update id="updateUser" parameterType="map">
+		UPDATE TB_USER_M
+		   SET
+		   		USER_NAME = #{userName}
+				, ZIPCODE = #{zipcode}
+				, ADDRESS = #{address}
+				, ADDRESS_DETAIL = #{addressDetail}
+				, EMAIL = #{email}
+				, MOBILE = #{mobile}
+				, SMS_YN = #{smsYn}
+				, EMAIL_YN = #{emailYn}
+				, UPDATE_USER = #{updateUser}
+				, UPDATE_DATE = NOW()
+				<if test='pwModifyYn == "Y"'>
+				, USER_PW = #{newPw}
+				, CHANGE_PW_DATE = DATE_FORMAT(NOW(), '%Y-%m-%d')
+				</if>
+      	 WHERE USER_ID 			= #{userId}
+	</update>
+
+	<delete id="deleteUser" parameterType="map">
+		DELETE FROM TB_USER_M
+		 WHERE USER_ID = #{userId}
+	</delete>
+
+</mapper>

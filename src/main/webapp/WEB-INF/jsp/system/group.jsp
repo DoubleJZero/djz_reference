@@ -147,7 +147,7 @@ function fn_delete(){
 	}
 
 	swal({
-		title: '<spring:message code="common.msg1" />',
+		title: '<spring:message code="button.delete" />',
         text: '<spring:message code="common.msg2" />',
         icon: "warning",
         buttons: ['<spring:message code="button.cancel" />','<spring:message code="button.confirm" />'],

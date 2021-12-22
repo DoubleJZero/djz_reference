@@ -50,7 +50,7 @@
 				, MOBILE = #{mobile}
 				, SMS_YN = #{smsYn}
 				, EMAIL_YN = #{emailYn}
-				, UPDATE_USER = #{userName}
+				, UPDATE_USER = #{updateUser}
 				, UPDATE_DATE = NOW()
 				<if test='pwModifyYn == "Y"'>
 				, USER_PW = #{newPw}

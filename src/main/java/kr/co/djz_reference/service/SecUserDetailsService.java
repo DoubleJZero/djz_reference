@@ -85,6 +85,7 @@ public class SecUserDetailsService extends DjzCbsService implements UserDetailsS
 					}
 
 					userDetails.setAuthorities(strList);
+					userDetails.setAuthList(strList);
 					userAuthMenu.put("authList", strList);
 
 					List<Map<String, Object>> authMenuList = mapper.selectList(serviceId+".selectUserAuthMenuList", userAuthMenu);

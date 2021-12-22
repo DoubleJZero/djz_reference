@@ -59,7 +59,7 @@
 	</select>
 
 	<select id="selectUserAuthMenuList" parameterType="map" resultType="egovMap">
-		select
+		SELECT
 				AUTH_ID
 				, MENU_ID
 				, USE_YN
@@ -73,7 +73,7 @@
 		 WHERE CONCAT(AUTH_ID, MENU_ID) IN (
 											SELECT DISTINCT CONCAT(AUTH_ID, MENU_ID) AS NEW_PK
 											  FROM TB_AUTH_MENU
-											 WHERE 1=1
+											 WHERE USE_YN = 'Y'
 											<if test='authList != null'>
 										   	   AND AUTH_ID IN
 												<foreach collection="authList" item="auth" open="(" close=")" separator=",">

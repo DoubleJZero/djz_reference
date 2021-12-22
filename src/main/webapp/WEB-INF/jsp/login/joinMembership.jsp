@@ -25,7 +25,6 @@
 						<label for="userId" class="col-sm-3 col-form-label"><spring:message code='login.userId' />&nbsp;<span style="color:red;">*</span></label>
 						<input type="text" id="userId" name="userId" class="form-control col-sm-9 custoenuhf" placeholder="<spring:message code='member.placeholderMsg1' />" maxlength="16" onkeypress="if(event.keyCode == 13){fn_joinMembership();}" />
 						<input type="hidden" id="userIdDupCheckKey" name="userIdDupCheckKey" maxlength="11" />
-						<input type="hidden" id="insertFlag" value="N" />
 						<div class="input-group-append">
                             <button class="btn btn-primary" type="button" onclick="fn_isDupCheck(1)"><i class="fab fa-searchengin"></i><spring:message code='member.dupCheck' /></button>
                         </div>
