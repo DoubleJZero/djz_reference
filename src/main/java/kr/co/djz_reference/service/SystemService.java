@@ -328,11 +328,11 @@ public class SystemService extends DjzCbsService {
 		 * 700 : 정상
     	 * 705 : 조회결과 없음
     	 */
-		List<Map<String, Object>> menuList = mapper.selectList(serviceId+".selectGroupList", param);
+		List<Map<String, Object>> list = mapper.selectList(serviceId+".selectGroupList", param);
 
-		if(menuList == null || menuList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+		if(list == null || list.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
 
-		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), menuList);
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), list);
 	}
 
 	/**
@@ -429,11 +429,11 @@ public class SystemService extends DjzCbsService {
 		 * 700 : 정상
     	 * 705 : 조회결과 없음
     	 */
-		List<Map<String, Object>> menuList = mapper.selectList(serviceId+".selectGroupAuthList", param);
+		List<Map<String, Object>> list = mapper.selectList(serviceId+".selectGroupAuthList", param);
 
-		if(menuList == null || menuList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+		if(list == null || list.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
 
-		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), menuList);
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), list);
 	}
 
 	/**
@@ -540,11 +540,11 @@ public class SystemService extends DjzCbsService {
 		 * 700 : 정상
     	 * 705 : 조회결과 없음
     	 */
-		List<Map<String, Object>> menuList = mapper.selectList(serviceId+".selectGroupMemberList", param);
+		List<Map<String, Object>> list = mapper.selectList(serviceId+".selectGroupMemberList", param);
 
-		if(menuList == null || menuList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+		if(list == null || list.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
 
-		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), menuList);
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), list);
 	}
 
 	/**
@@ -741,4 +741,101 @@ public class SystemService extends DjzCbsService {
 		request.getSession().setAttribute("userAuthInfo", userAuthMenu);
 	}
 
+	/**
+	 * 코드그룹 조회
+	 *
+	 * @param param
+	 * @return
+	 */
+	public List<Map<String, Object>> getCodeGroupList(Map<String, Object> param) {
+
+		return mapper.selectList(serviceId+".selectCodeGroupList", param);
+	}
+
+	/**
+	 * 코드 조회
+	 *
+	 * @param param
+	 * @return
+	 */
+	public Map<String, Object> getCodeList(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 705 : 조회결과 없음
+    	 */
+		List<Map<String, Object>> codeList = mapper.selectList(serviceId+".selectCodeList", param);
+
+		if(codeList == null || codeList.size() == 0) return DjzComUtil.responseMap(DjzHttpStatus.DATA_EMPTY.getStatusCode());
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode(), codeList);
+	}
+
+	/**
+	 * 코드 등록
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getInsertCode(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 * 704 : 해당코드그룹에 코드아이디 중복
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String codeGroup = (String) param.get("codeGroup");
+		String codeId = (String) param.get("codeId");
+		String codeData = (String) param.get("codeData");
+		String codeOrder = (String) param.get("codeOrder");
+
+		if(StringUtils.isBlank(codeGroup) || StringUtils.isBlank(codeId)
+				|| StringUtils.isBlank(codeData) || StringUtils.isBlank(codeOrder))
+			return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		int cnt = mapper.selectOne(serviceId+".selectCodeIdCnt", param);
+
+		if(cnt != 0) return DjzComUtil.responseMap(DjzHttpStatus.DUPLICATE.getStatusCode());
+
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+		param.put("createUser", userInfo.get("userId"));
+		param.put("updateUser", userInfo.get("userId"));
+
+		mapper.insert(serviceId+".insertCode", param);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
+
+	/**
+	 * 코드 수정
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public Map<String, Object> getUpdateCode(Map<String, Object> param) {
+		/* ■ 상태코드
+		 * 700 : 정상
+    	 * 701 : 비정상 접근 - param null
+    	 * 702 : 필수값 없음
+    	 */
+		if(param == null) return DjzComUtil.responseMap(DjzHttpStatus.INVALID_PARAM.getStatusCode());
+
+		String codeSeq = String.valueOf(param.get("codeSeq"));
+		String codeData = (String) param.get("codeData");
+		String codeOrder = (String) param.get("codeOrder");
+
+		if(DjzComUtil.isStrNull(codeSeq)
+				|| StringUtils.isBlank(codeData) || StringUtils.isBlank(codeOrder))
+			return DjzComUtil.responseMap(DjzHttpStatus.EMPTY_ESSENTIAL.getStatusCode());
+
+		Map<String, Object> userInfo = UserDetailsHelper.getAuthenticatedUser();
+		param.put("updateUser", userInfo.get("userId"));
+
+		mapper.update(serviceId+".updateCode", param);
+
+		return DjzComUtil.responseMap(DjzHttpStatus.NORMAL.getStatusCode());
+	}
 }

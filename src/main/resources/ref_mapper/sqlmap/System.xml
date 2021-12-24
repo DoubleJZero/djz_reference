@@ -379,4 +379,75 @@
 				, #{roleP}
 		)
 	</insert>
+
+	<select id="selectCodeGroupList" parameterType="map" resultType="egovMap">
+		SELECT DISTINCT CODE_GROUP
+		  FROM TB_CODE_M
+	</select>
+
+	<select id="selectCodeList" parameterType="map" resultType="egovMap">
+		SELECT
+				CODE_SEQ
+				, CODE_GROUP
+				, CODE_ID
+				, CODE_DATA
+				, CODE_ORDER
+				, IFNULL(CODE_ETC1, '') AS CODE_ETC1
+				, IFNULL(CODE_ETC2, '') AS CODE_ETC2
+				, IFNULL(CODE_ETC3, '') AS CODE_ETC3
+		  FROM TB_CODE_M
+		 WHERE 1=1
+		<if test='searchCodeGroup != null and searchCodeGroup != ""'>
+		   AND CODE_GROUP = #{searchCodeGroup}
+		</if>
+		 ORDER BY CODE_GROUP ASC, CODE_ORDER ASC, CODE_ID ASC
+	</select>
+
+	<select id="selectCodeIdCnt" parameterType="map" resultType="Integer">
+		SELECT COUNT(CODE_SEQ)
+		  FROM TB_CODE_M
+		 WHERE CODE_ID = #{codeId}
+		   AND CODE_GROUP = #{codeGroup}
+	</select>
+
+	<insert id="insertCode" parameterType="map">
+		INSERT INTO TB_CODE_M(
+				CODE_GROUP
+				, CODE_ID
+				, CODE_DATA
+				, CODE_ORDER
+				, CODE_ETC1
+				, CODE_ETC2
+				, CODE_ETC3
+				, CREATE_USER
+				, CREATE_DATE
+				, UPDATE_USER
+				, UPDATE_DATE
+		) VALUES (
+				#{codeGroup}
+				, #{codeId}
+				, #{codeData}
+				, #{codeOrder}
+				, #{codeEtc1}
+				, #{codeEtc2}
+				, #{codeEtc3}
+				, #{createUser}
+				, NOW()
+				, #{updateUser}
+				, NOW()
+		)
+	</insert>
+
+	<update id="updateCode" parameterType="map">
+		UPDATE TB_CODE_M
+		   SET
+		   		CODE_DATA			= #{codeData}
+				, CODE_ORDER		= #{codeOrder}
+				, CODE_ETC1			= #{codeEtc1}
+				, CODE_ETC2			= #{codeEtc2}
+				, CODE_ETC3			= #{codeEtc3}
+	     	  	, UPDATE_USER		= #{updateUser}
+	     	  	, UPDATE_DATE		= NOW()
+		 WHERE CODE_SEQ = #{codeSeq}
+	</update>
 </mapper>

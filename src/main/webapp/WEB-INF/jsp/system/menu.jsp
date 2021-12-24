@@ -102,8 +102,9 @@
 													<div class="input-group mb-1" style="background: #fff">
 														<label class="col-sm-4 col-form-label"><spring:message code='system.msg8' /></label>
 								                        <select class="form-control col-sm-8" id="useYn">
-								                        	<option value="Y">사용</option>
-                          	 								<option value="N">미사용</option>
+								                        	<c:forEach var="item" items="${useYnList}" varStatus="status">
+								                        		<option value="${item.codeId}"><c:out value='${item.codeData}'/></option>
+		                        	 						</c:forEach>
 								                        </select>
 													</div>
 

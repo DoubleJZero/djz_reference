@@ -61,6 +61,10 @@ public class SystemController {
 	@RequestMapping(value = "/system/menu.do")
 	public String menu(HttpServletRequest request, ModelMap model) {
 
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("searchCodeGroup", "USE_YN");
+		model.addAttribute("useYnList", systemService.getCodeList(param).get("data"));
+
 		return "system/menu";
 	}
 
@@ -554,5 +558,68 @@ public class SystemController {
     		, HttpServletRequest request, HttpServletResponse response) {
 
     	DjzComUtil.responseJSON(response, systemService.getUpdateAuthMenu(param, request));
+    }
+
+	/**
+	 * 코드 관리
+	 * Mapping Address : /system/code.do
+	 *
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/system/code.do")
+	public String code(HttpServletRequest request, ModelMap model) {
+
+		Map<String, Object> param = new HashMap<String, Object>();
+
+		model.addAttribute("codeGroupList", systemService.getCodeGroupList(param));
+
+		return "system/code";
+	}
+
+	/**
+	 * 코드 조회
+	 * Mapping Address : /system/getCodeList.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getCodeList.do")
+    public @ResponseBody void getCodeList(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getCodeList(param));
+    }
+
+	/**
+	 * 코드 등록
+	 * Mapping Address : /system/getInsertCode.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getInsertCode.do")
+    public @ResponseBody void getInsertCode(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getInsertCode(param));
+    }
+
+	/**
+	 * 코드 수정
+	 * Mapping Address : /system/getUpdateCode.do
+	 *
+	 * @param param
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/system/getUpdateCode.do")
+    public @ResponseBody void getUpdateCode(@RequestParam Map<String, Object> param
+    		, HttpServletRequest request, HttpServletResponse response) {
+
+    	DjzComUtil.responseJSON(response, systemService.getUpdateCode(param));
     }
 }
