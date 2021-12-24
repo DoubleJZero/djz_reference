@@ -21,7 +21,7 @@
 
 	    <s:session-management>
         	<s:concurrency-control max-sessions="1" />
-   		 </s:session-management>
+   		</s:session-management>
 
 		<s:form-login
 			username-parameter="userId"
