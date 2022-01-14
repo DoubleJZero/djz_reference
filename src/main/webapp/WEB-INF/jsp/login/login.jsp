@@ -54,7 +54,7 @@
 		var userPw = $("#userPw").val();
 
 		if(!checkValid.isCheckValueVaild(userId)){
-			swal('<spring:message code="login.errMsg1" />').then((ok)=>{
+			swal('<spring:message code="login.errMsg1" />',{closeOnClickOutside: false}).then((ok)=>{
 				if(ok){
 					$("#userId").focus();
 				}
@@ -64,7 +64,7 @@
 		}
 
 		if(!checkValid.isCheckValueVaild(userPw)){
-			swal('<spring:message code="login.errMsg2" />').then((ok)=>{
+			swal('<spring:message code="login.errMsg2" />',{closeOnClickOutside: false}).then((ok)=>{
 				if(ok){
 					$("#userPw").focus();
 				}
@@ -92,7 +92,7 @@
 
 	'<c:if test="${!empty statusCode and statusCode eq 888}">'
 	$(function(){
-		swal('<spring:message code="login.errMsg12" />').then((ok)=>{
+		swal('<spring:message code="login.errMsg12" />',{closeOnClickOutside: false}).then((ok)=>{
 			if(ok){
 				$("#userId").focus();
 			}
@@ -102,7 +102,7 @@
 
 	'<c:if test="${!empty statusCode and statusCode eq 705}">'
 	$(function(){
-		swal('<spring:message code="login.errMsg3" />').then((ok)=>{
+		swal('<spring:message code="login.errMsg3" />',{closeOnClickOutside: false}).then((ok)=>{
 			if(ok){
 				$("#userId").focus();
 			}
@@ -112,7 +112,7 @@
 
 	'<c:if test="${!empty statusCode and statusCode eq 706}">'
 	$(function(){
-		swal('<spring:message code="login.errMsg4" />').then((ok)=>{
+		swal('<spring:message code="login.errMsg4" />',{closeOnClickOutside: false}).then((ok)=>{
 			if(ok){
 				$("#userPw").focus();
 			}
@@ -122,7 +122,7 @@
 
 	'<c:if test="${!empty statusCode and statusCode eq 707}">'
 	$(function(){
-		swal('<spring:message code="login.errMsg7" />').then((ok)=>{
+		swal('<spring:message code="login.errMsg7" />',{closeOnClickOutside: false}).then((ok)=>{
 			if(ok){
 				dynamicSubmit.createFormSubmit("/pwdChange.do", "post","","userId",userId,1);
 			}
